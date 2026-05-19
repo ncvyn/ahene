@@ -3,6 +3,7 @@ import os
 
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 
 
 def main():
@@ -16,18 +17,19 @@ def main():
         raise RuntimeError("GEMINI_API_KEY not found")
 
     client = genai.Client(api_key=api_key)
-    object = client.models.generate_content(
+    messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
+    response = client.models.generate_content(
         model="gemini-3.1-flash-lite",
-        contents=args.user_prompt,
+        contents=messages,
     )
 
-    usage_metadata = object.usage_metadata
+    usage_metadata = response.usage_metadata
     if usage_metadata is None:
         raise RuntimeError("usage metadata not found")
     print(f"Prompt tokens: {usage_metadata.prompt_token_count}")
     print(f"Response tokens: {usage_metadata.candidates_token_count}")
     print("Response:")
-    print(object.text)
+    print(response.text)
 
 
 if __name__ == "__main__":
