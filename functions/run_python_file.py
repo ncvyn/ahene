@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+from google.genai import types
+
 from config import TIMEOUT
 from functions.helper import validate_path
 
@@ -38,3 +40,26 @@ def run_python_file(
         else:
             output += f"STDERR:\n{cmd_result.stderr}(stderr end)\n"
     return output
+
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Runs a specified Python file with optional arguments sent to it. If the file does so, the function also outputs STDOUT and STDERR. It also returns the process code if the command was unsucessful",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="File path to get content from, relative to the working directory (default is the working directory itself)",
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                description="[THIS IS OPTIONAL] A list of arguments (args) that will be sent to the Python file.",
+                items=types.Schema(
+                    type=types.Type.STRING,
+                    description="[THIS IS OPTIONAL] An argument that will be sent to the Python file.",
+                ),
+            ),
+        },
+    ),
+)
