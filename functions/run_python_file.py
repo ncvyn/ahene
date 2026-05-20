@@ -36,9 +36,9 @@ def run_python_file(
         output += "No output produced\n"
     else:
         if cmd_result.stdout != "":
-            output += f"STDOUT:\n{cmd_result.stdout}(stdout end)\n"
+            output += f"STDOUT:\n{cmd_result.stdout}\n"
         else:
-            output += f"STDERR:\n{cmd_result.stderr}(stderr end)\n"
+            output += f"STDERR:\n{cmd_result.stderr}\n"
     return output
 
 

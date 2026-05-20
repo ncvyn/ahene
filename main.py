@@ -53,9 +53,6 @@ def main():
 
             if args.verbose:
                 print(f"-> {function_response.response}")
-                print(
-                    f"(RESULT START)\n{function_response.response['result']}\n(RESULT END)"
-                )
 
 
 if __name__ == "__main__":
