@@ -5,7 +5,10 @@ import os
 # is_err (bool)
 # result (str)
 def validate_path(
-    working_directory: str, relative_path: str, should_be_dir: bool
+    working_directory: str,
+    relative_path: str,
+    should_be_dir: bool,
+    create_if_empty=False,
 ) -> tuple[bool, str]:
     abs_working_dir = os.path.abspath(working_directory)
     path = os.path.normpath(os.path.join(abs_working_dir, relative_path))
@@ -14,10 +17,10 @@ def validate_path(
         is_path_dir = os.path.isdir(path)
         if not is_path_dir:
             return (True, f'Error: "{path}" is not a directory')
-    else:
+    elif not should_be_dir and not create_if_empty:
         is_path_file = os.path.isfile(path)
         if not is_path_file:
-            return (True, f'Error: File not found or is not a regular file: "{path}"')
+            return (True, f'Error: "{path}" is not a file')
 
     valid_target_directory = (
         os.path.commonpath([abs_working_dir, path]) == abs_working_dir
@@ -25,7 +28,7 @@ def validate_path(
     if not valid_target_directory:
         return (
             True,
-            f'Error: Cannot read "{path}" as it is outside the permitted working directory',
+            f'Error: "{path}" is outside the permitted working directory',
         )
 
     return (False, path)
