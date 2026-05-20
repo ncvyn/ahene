@@ -16,11 +16,11 @@ def validate_path(
     if should_be_dir:
         is_path_dir = os.path.isdir(path)
         if not is_path_dir:
-            return (True, f'Error: "{path}" is not a directory')
+            return (True, f'Error: "{path}" is not an existing directory')
     elif not should_be_dir and not create_if_empty:
         is_path_file = os.path.isfile(path)
         if not is_path_file:
-            return (True, f'Error: "{path}" is not a file')
+            return (True, f'Error: "{path}" is not an existing file')
 
     valid_target_directory = (
         os.path.commonpath([abs_working_dir, path]) == abs_working_dir
