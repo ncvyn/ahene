@@ -12,7 +12,7 @@ from prompts import system_prompt
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Ahente")
+    parser = argparse.ArgumentParser(description="Ahene")
     parser.add_argument("user_prompt", type=str, help="User prompt")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     args = parser.parse_args()
