@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-from functions.call_function import available_functions
+from functions.call_function import available_functions, call_function
 from prompts import system_prompt
 
 
@@ -41,8 +41,21 @@ def main():
 
     if response.function_calls is not None:
         for function in response.function_calls:
-            print(f"Calling function: {function.name}({function.args})")
-    print(response.text)
+            function_call_result = call_function(function)
+            if function_call_result.parts is None:
+                raise Exception("function_call_result has no parts")
+
+            function_response = function_call_result.parts[0].function_response
+            if not isinstance(function_response, types.FunctionResponse):
+                raise Exception("function_response is not a FunctionResponse")
+            if function_response.response is None:
+                raise Exception("function_response has no response field")
+
+            if args.verbose:
+                print(f"-> {function_response.response}")
+                print(
+                    f"(RESULT START)\n{function_response.response['result']}\n(RESULT END)"
+                )
 
 
 if __name__ == "__main__":
