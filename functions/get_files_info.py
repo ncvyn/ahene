@@ -2,11 +2,18 @@ import os
 
 
 def get_files_info(working_directory, directory="."):
-    if not os.path.isdir(directory):
-        return f'Error: "{directory}" is not a directory'
     working_dir = os.path.abspath(working_directory)
     target_dir = os.path.normpath(os.path.join(working_dir, directory))
+    if not os.path.isdir(target_dir):
+        return f'Error: "{directory}" is not a directory'
     valid_target_dir = os.path.commonpath([working_dir, target_dir]) == working_dir
     if not valid_target_dir:
         return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
-    return f'Success: "{directory}" is within the working directory'
+
+    result = ""
+    for file_name in os.listdir(target_dir):
+        absolute_file = os.path.join(target_dir, file_name)
+        file_size = os.path.getsize(absolute_file)
+        is_dir = os.path.isdir(absolute_file)
+        result += f"- {file_name}: file_size={file_size} bytes, is_dir={is_dir}\n"
+    return result
